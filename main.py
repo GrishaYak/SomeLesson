@@ -39,8 +39,43 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
+
 def main():
     db_session.global_init("db/blogs.db")
+    db_sess = db_session.create_session()
+    user = User()
+    user.surname = "Scott"
+    user.name = "Ridley"
+    user.age = 21
+    user.position = "captain"
+    user.speciality = "research engineer"
+    user.address = "module_1"
+    user.email = "scott_chief@mars.org"
+    db_sess.add(user)
+
+    user = User()
+    user.name = "Grisha"
+    user.surname = "Yakushevskiy"
+    user.address = "TopSecret"
+    user.age = int(1e9)
+    db_sess.add(user)
+
+    user = User()
+    user.surname = "Smit"
+    user.name = "John"
+    user.age = 0
+    user.speciality = "Aliens-Fighter"
+    db_sess.add(user)
+
+    user = User()
+    user.name = "WhoAmI"
+    user.surname = "?"
+    user.speciality = "thinker"
+    user.address = "HisOwnMind"
+    user.age = -1
+    db_sess.add(user)
+
+    db_sess.commit()
     app.run()
 
 
