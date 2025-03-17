@@ -3,6 +3,9 @@ from data import db_session
 from data.users import User
 from data.news import News
 from forms.user import RegisterForm
+from .data.jobs import Jobs
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -74,6 +77,15 @@ def main():
     user.address = "HisOwnMind"
     user.age = -1
     db_sess.add(user)
+
+    cptn = Jobs()
+    cptn.team_leader = 1
+    cptn.job = "deployment of residential modules 1 and 2"
+    cptn.work_size = 15
+    cptn.collaborators = "2, 3"
+    cptn.start_date = datetime.now()
+    cptn.is_finished = False
+    db_sess.add(cptn)
 
     db_sess.commit()
     app.run()
