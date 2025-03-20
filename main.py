@@ -1,14 +1,24 @@
-from flask import Flask, render_template, redirect
-from data import db_session
+from flask import Flask, render_template, redirect, make_response, jsonify
 from data.users import User
 from data.news import News
 from forms.user import RegisterForm
-from .data.jobs import Jobs
+from data.jobs import Jobs
 from datetime import datetime
+from data import db_session, news_api
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
 @app.route("/")
@@ -43,8 +53,7 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
-def main():
-    db_session.global_init("db/blogs.db")
+def add_some_guys():
     db_sess = db_session.create_session()
     user = User()
     user.surname = "Scott"
@@ -88,6 +97,11 @@ def main():
     db_sess.add(cptn)
 
     db_sess.commit()
+
+
+def main():
+    db_session.global_init("db/blogs.db")
+    app.register_blueprint(news_api.blueprint)
     app.run()
 
 

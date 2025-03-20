@@ -1,11 +1,11 @@
 import datetime
 import sqlalchemy
 from sqlalchemy import orm
-
+from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
 
 
-class News(SqlAlchemyBase):
+class News(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'news'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -19,3 +19,6 @@ class News(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')
+
+    def __init__(self, title='', content='', user_id=None, is_private=True):
+        pass
